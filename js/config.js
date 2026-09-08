@@ -17,10 +17,10 @@
      *  questionSec  : 한 문제를 푸는 제한시간(초). 지나면 -150 & 다음 문제
      * ------------------------------------------------------- */
     LEVELS: [
-      { key: 'L1',    label: 'LEVEL 1',    remainingMax: 60, remainingMin: 45, choiceCount: 5,  questionSec: 9.0 },
-      { key: 'L2',    label: 'LEVEL 2',    remainingMax: 45, remainingMin: 25, choiceCount: 7,  questionSec: 7.0 },
-      { key: 'L3',    label: 'LEVEL 3',    remainingMax: 25, remainingMin: 10, choiceCount: 9,  questionSec: 5.5 },
-      { key: 'FINAL', label: 'FINAL RUSH', remainingMax: 10, remainingMin: 0,  choiceCount: 12, questionSec: 4.5 },
+      { key: 'L1',    label: 'LEVEL 1',    remainingMax: 60, remainingMin: 45, choiceCount: 5, questionSec: 12.0 },
+      { key: 'L2',    label: 'LEVEL 2',    remainingMax: 45, remainingMin: 25, choiceCount: 6, questionSec: 9.5 },
+      { key: 'L3',    label: 'LEVEL 3',    remainingMax: 25, remainingMin: 10, choiceCount: 8, questionSec: 7.5 },
+      { key: 'FINAL', label: 'FINAL RUSH', remainingMax: 10, remainingMin: 0,  choiceCount: 10, questionSec: 5.5 },
     ],
     FINAL_RUSH_AT: 10,          // 남은 시간이 이 값 이하이면 FINAL RUSH 연출
 

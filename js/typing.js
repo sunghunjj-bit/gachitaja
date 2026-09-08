@@ -135,11 +135,8 @@
         return;
       }
 
-      // 어떤 후보와도 접두어가 맞지 않는 "쓸모없는" 입력은 조용히 비움(감점 아님).
-      if (allowWrong && !this.isComposing && !prefixHit && norm.length >= 2) {
-        this._resetInputHard();
-        this.onInput({ raw: '', normalized: '', prefixHit: false });
-      }
+      // 접두어가 안 맞아도 입력값은 그대로 둔다(사용자가 백스페이스로 직접 고치도록).
+      // 빨간색 표시(onInput 의 prefixHit=false)로만 알려준다.
     }
 
     _resetInputHard() {
