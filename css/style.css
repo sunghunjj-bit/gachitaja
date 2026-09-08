@@ -473,6 +473,7 @@ select.retro-input { appearance: none; cursor: pointer; }
 .center-msg.combo-msg { color: var(--yellow); }
 .center-msg.combo-small { font-size: clamp(1rem, 4vw, 1.6rem); color: var(--pink); }
 .center-msg.miss-msg { color: var(--danger); text-shadow: 3px 3px 0 #000; }
+.center-msg.levelup-msg { color: var(--green); text-shadow: 3px 3px 0 var(--purple); }
 
 #final-rush-banner {
   position: absolute;

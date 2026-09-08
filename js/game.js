@@ -361,11 +361,23 @@
 
     _onLevelChange(level) {
       const s = this.state;
+      const first = s.levelKey == null;
       s.levelKey = level.key;
       this.els.hudLevel.textContent = level.label;
 
-      // 레벨이 오르면 다음 문제부터 후보 수 증가·제한시간 단축이 적용됨
-      // (현재 진행 중인 문제는 그대로 두어 혼란 방지)
+      // HUD 레벨 뱃지 강조
+      this.els.hudLevel.classList.remove('pulse');
+      void this.els.hudLevel.offsetWidth;
+      this.els.hudLevel.classList.add('pulse');
+
+      // 게임 시작(L1)이 아니고, FINAL(별도 배너 있음)이 아니면 → 큰 안내
+      if (!first && level.key !== 'FINAL') {
+        global.Effects.centerMessage(this.els.centerMsg, level.label + '!', 'levelup-msg');
+        global.Effects.sound.play('go');
+      }
+
+      // 레벨이 오르면 '다음 문제부터' 후보 수 증가·제한시간 단축이 적용됨
+      // (진행 중인 문제는 그대로 두어 혼란 방지)
     },
 
     _loop(now) {
