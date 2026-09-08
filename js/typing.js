@@ -38,6 +38,8 @@
       this.candidates = [];       // [{id, text, normalized, isAnswer, ...}]
       this.isComposing = false;
       this.enabled = false;
+      this._muteResidual = false;  // 판정 직후 IME 가 뱉는 잔여 이벤트 무시용
+      this._muteTimer = 0;
 
       this._onCompStart = () => { this.isComposing = true; };
       this._onCompEnd = () => {
@@ -47,6 +49,8 @@
       };
       this._onInputEvt = () => { this._evaluate(false); };
       this._onKeyDown = (e) => {
+        // 실제 키 입력이 들어오면 = 사용자가 다시 치는 중 → 잔여 무시 해제
+        this._muteResidual = false;
         if (e.key === 'Enter') {
           e.preventDefault();
           if (!this.isComposing) this._evaluate(true);
@@ -80,7 +84,14 @@
     clear() {
       this.el.value = '';
       this.isComposing = false;
+      this._armMute();
       this.onInput({ raw: '', normalized: '', prefixHit: false });
+    }
+
+    _armMute() {
+      this._muteResidual = true;
+      clearTimeout(this._muteTimer);
+      this._muteTimer = setTimeout(() => { this._muteResidual = false; }, 300);
     }
 
     focus() {
@@ -94,6 +105,14 @@
      */
     _evaluate(allowWrong) {
       if (!this.enabled) return;
+
+      // 판정 직후 IME 가 이전 글자를 되뱉는 잔여 이벤트 → 입력창 비우고 무시
+      if (this._muteResidual) {
+        if (this.el.value) this.el.value = '';
+        this.isComposing = false;
+        this.onInput({ raw: '', normalized: '', prefixHit: false });
+        return;
+      }
 
       const raw = this.el.value;
       const norm = normalize(raw);
@@ -124,10 +143,12 @@
     }
 
     _resetInputHard() {
-      // 조합 상태를 확실히 끊기 위해 blur/focus
+      const wasComposing = this.isComposing;
       this.el.value = '';
       this.isComposing = false;
-      if (this.enabled) {
+      this._armMute();
+      // 조합 중이었을 때만 blur/focus 로 IME 세션을 확실히 끊는다
+      if (this.enabled && wasComposing) {
         this.el.blur();
         this.focus();
       }
