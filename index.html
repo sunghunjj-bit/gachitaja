@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=5" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
 </head>
 <body>
   <div id="crt-overlay" aria-hidden="true"></div>
@@ -52,7 +52,7 @@
           <button id="btn-open-howto" class="link-btn">게임 방법 보기</button>
         </div>
 
-        <p class="foot-note">v1.0 · 문제은행 5분야 × 20문제(총 100문항) · 기록은 이 브라우저에 저장됩니다</p>
+        <p class="foot-note">v1.0 · 5개 분야 × 20문제(총 100문항) · 결과는 전체 랭킹에 자동 등록됩니다</p>
       </div>
     </section>
 
@@ -67,8 +67,8 @@
           <li>단어를 완성하면 <b>즉시 판정</b>됩니다. (엔터 불필요)</li>
           <li>정답이면 그 단어가 <b>폭발</b>하고 점수를 얻습니다. <span class="pt-good">+500 ~</span></li>
           <li>오답 단어를 완성하면 <b>감점</b>되고 콤보가 초기화됩니다. <span class="pt-bad">-100</span></li>
-          <li>문제별 제한시간(상단 바) 안에 못 맞히면 <span class="pt-bad">-150</span>, 다음 문제로 넘어갑니다.</li>
-          <li>전체 <b>60초</b>. 시간이 지날수록 후보가 많아지고 제한시간이 짧아집니다.</li>
+          <li>못 찾겠으면 놔두세요. 시간이 지나면 <b>감점 없이</b> 다음 문제로 넘어갑니다.</li>
+          <li>진짜 승부는 <b>전체 60초</b>. 그 안에 최대한 많이 맞히면 됩니다!</li>
         </ol>
         <p class="howto-tip">가운뎃점(·)·띄어쓰기는 입력하지 않아도 됩니다. 예) <code>신고회피</code> = <code>신고·회피</code></p>
         <button id="btn-ready" class="btn btn-primary btn-block">READY</button>
@@ -188,15 +188,15 @@
   </main>
 
   <!-- ===== 스크립트: 로드 순서 중요 ===== -->
-  <script src="js/config.js?v=5"></script>
-  <script src="data/departments.js?v=5"></script>
-  <script src="data/questions.js?v=5"></script>
-  <script src="js/score.js?v=5"></script>
-  <script src="js/typing.js?v=5"></script>
-  <script src="js/effects.js?v=5"></script>
-  <script src="js/storage.js?v=5"></script>
-  <script src="js/game.js?v=5"></script>
-  <script src="js/ranking.js?v=5"></script>
-  <script src="js/app.js?v=5"></script>
+  <script src="js/config.js?v=7"></script>
+  <script src="data/departments.js?v=7"></script>
+  <script src="data/questions.js?v=7"></script>
+  <script src="js/score.js?v=7"></script>
+  <script src="js/typing.js?v=7"></script>
+  <script src="js/effects.js?v=7"></script>
+  <script src="js/storage.js?v=7"></script>
+  <script src="js/game.js?v=7"></script>
+  <script src="js/ranking.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
 </body>
 </html>

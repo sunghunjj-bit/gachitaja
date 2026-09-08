@@ -186,6 +186,7 @@
     stop() {
       this.running = false;
       cancelAnimationFrame(this._raf);
+      clearTimeout(this._gapTimer);
       this.typing.disable();
       global.Effects.setFinalRush(this.els.screenGame, this.els.rushBanner, false);
       this.els.rushCount.hidden = true;
@@ -465,7 +466,12 @@
       setTimeout(() => this.els.hudCombo.classList.remove('pulse'), 200);
 
       this._setHud();
-      this._nextQuestion();
+
+      // 정답 맞힌 단어들 즉시 치우고, 잠깐 숨 고른 뒤 다음 문제 (숨돌릴 틈)
+      this._clearWords();
+      this.typing.clear();
+      clearTimeout(this._gapTimer);
+      this._gapTimer = setTimeout(() => { if (this.running) this._nextQuestion(); }, 450);
     },
 
     _handleWrong(word) {
@@ -489,23 +495,29 @@
       const s = this.state;
       if (s.advancing) return;
       s.advancing = true;
-      s.score += global.Score.missed();
-      s.wrongCount += 1;
-      s.missedCount += 1;
+      const penalty = global.Score.missed();
+      s.score += penalty;
+      s.missedCount += 1;       // 정확도에는 반영 안 함(못 찾은 것 ≠ 틀린 것)
       s.combo = 0;
 
       global.Effects.sound.play('missed');
-      global.Effects.shake(this.els.area);
-      global.Effects.centerMessage(this.els.centerMsg, 'MISSED!', 'miss-msg');
-      global.Effects.scorePopup(this.els.area, this._areaMetrics().w / 2, this._areaMetrics().h - 40, global.Score.missed());
+      global.Effects.centerMessage(this.els.centerMsg, penalty < 0 ? 'MISSED!' : 'SKIP →', 'miss-msg');
+      if (penalty < 0) {
+        global.Effects.shake(this.els.area);
+        global.Effects.scorePopup(this.els.area, this._areaMetrics().w / 2, this._areaMetrics().h - 40, penalty);
+      }
 
       this._setHud();
-      this._nextQuestion();
+      this._clearWords();
+      this.typing.clear();
+      clearTimeout(this._gapTimer);
+      this._gapTimer = setTimeout(() => { if (this.running) this._nextQuestion(); }, 400);
     },
 
     _endGame() {
       this.running = false;
       cancelAnimationFrame(this._raf);
+      clearTimeout(this._gapTimer);
       this.typing.disable();
       global.Effects.setFinalRush(this.els.screenGame, this.els.rushBanner, false);
       this.els.rushCount.hidden = true;
