@@ -82,16 +82,26 @@
     }
 
     clear() {
-      this.el.value = '';
-      this.isComposing = false;
-      this._armMute();
+      this._replaceInput();
       this.onInput({ raw: '', normalized: '', prefixHit: false });
     }
 
-    _armMute() {
-      this._muteResidual = true;
-      clearTimeout(this._muteTimer);
-      this._muteTimer = setTimeout(() => { this._muteResidual = false; }, 300);
+    _replaceInput() {
+      // Each question gets its own input node: late IME events stay on the old one.
+      const old = this.el;
+      const focused = old.ownerDocument.activeElement === old;
+      const fresh = old.cloneNode(false);
+      this.destroy();
+      old.replaceWith(fresh);
+      this.el = fresh;
+      fresh.value = '';
+      this.isComposing = false;
+      this._muteResidual = false;
+      fresh.addEventListener('compositionstart', this._onCompStart);
+      fresh.addEventListener('compositionend', this._onCompEnd);
+      fresh.addEventListener('input', this._onInputEvt);
+      fresh.addEventListener('keydown', this._onKeyDown);
+      if (this.enabled && focused) this.focus();
     }
 
     focus() {
@@ -140,18 +150,11 @@
     }
 
     _resetInputHard() {
-      const wasComposing = this.isComposing;
-      this.el.value = '';
-      this.isComposing = false;
-      this._armMute();
-      // 조합 중이었을 때만 blur/focus 로 IME 세션을 확실히 끊는다
-      if (this.enabled && wasComposing) {
-        this.el.blur();
-        this.focus();
-      }
+      this.clear();
     }
 
     destroy() {
+      clearTimeout(this._muteTimer);
       this.el.removeEventListener('compositionstart', this._onCompStart);
       this.el.removeEventListener('compositionend', this._onCompEnd);
       this.el.removeEventListener('input', this._onInputEvt);
